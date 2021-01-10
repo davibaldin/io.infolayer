@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.infolayer</groupId>
+	<artifactId>io.infolayer.executor</artifactId>
+	<version>1.0.0</version>
+  	<name>Infolayer.io :: Executor Services</name>
+  	<url>https://infolayer.io</url>
+  	<description>Infolayer NEXtGen Automation and Observability Framework</description>
+	<packaging>bundle</packaging>
+
+	<parent>
+		<groupId>io.infolayer</groupId>
+		<artifactId>io.infolayer</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../io.infolayer</relativePath>
+	</parent>
+
+	 <properties>
+	    <skipTests>true</skipTests>
+		<org.osgi.framework.version>1.8.0</org.osgi.framework.version>
+		<org.osgi.core.version>6.0.0</org.osgi.core.version>
+		<org.osgi.service.component.annotations.version>1.4.0</org.osgi.service.component.annotations.version>
+		<org.apache.felix.scr.version>1.2.10</org.apache.felix.scr.version>
+	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>5.1.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                    	<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Bundle-Vendor>infolayer.io</Bundle-Vendor>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Export-Package>!*</Export-Package>
+                        <Import-Package>
+							!sun.security.util,
+							*
+                        </Import-Package>
+						<Bundle-ClassPath>.,{maven-dependencies}</Bundle-ClassPath>
+                        <Embed-Dependency>*;scope=compile|runtime;artifactId=!
+						org.osgi.framework|
+						org.osgi.service.component.annotations|
+						osgi.core
+						</Embed-Dependency>
+						<Embed-Directory>lib</Embed-Directory>
+						<_dsannotations>*</_dsannotations>
+                    </instructions>
+                </configuration>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>${org.apache.kafka.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.databind.version}</version>
+		</dependency>
+
+	  	<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.framework</artifactId>
+			<version>${org.osgi.framework.version}</version>
+		</dependency>
+
+		<dependency>
+   			<groupId>org.osgi</groupId>
+   			<artifactId>osgi.core</artifactId>
+   			<version>${org.osgi.core.version}</version>
+   		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.component.annotations</artifactId>
+			<version>${org.osgi.service.component.annotations.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.service.jdbc</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+			<version>${org.apache.felix.scr.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+    		<groupId>io.infolayer</groupId>
+    		<artifactId>io.infolayer.api</artifactId>
+			<version>1.0.0</version>
+    	</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${com.google.code.gson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>bson</artifactId>
+			<version>${org.mongodb.bson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>${snakeyaml.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>${apache.commons.text.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.profesorfalken</groupId>
+			<artifactId>jPowerShell</artifactId>
+			<version>${jPowerShell.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.io.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jtwig</groupId>
+			<artifactId>jtwig-core</artifactId>
+			<version>${jtwig.version}</version>
+		</dependency>		
+
+	</dependencies>
+
+</project>
