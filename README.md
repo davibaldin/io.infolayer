@@ -26,11 +26,11 @@ Infolayer project is an abstraction layer for tools and frameworks responsible f
 - Support for events in E-mail reading.
 - Support for events in GELF (Graylog Extend Log format).
 
-## Setup and quick start
+## Setup and Quickstart
 
 To setup a new environment, visit [Setup](docs/Setup.md).
 
-To quick start on a new environment, visit [Quick start](setup/QuickStart.md).
+Are you Feeling impatient? I like your style, please visit [Quickstart](setup/Quickstart.md).
 
 ## Concept
 
