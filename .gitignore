@@ -1,6 +1,7 @@
 target/
 io.infolayer/.mvn/wrapper/maven-wrapper.jar
 io.infolayer.executor/distribution/.mvn/wrapper/maven-wrapper.jar
+io.infolayer.executor/distribution/*.zip
 io.infolayer.executor/distribution/temp
 io.infolayer.executor/distribution/target
 !**/src/main/**/target/

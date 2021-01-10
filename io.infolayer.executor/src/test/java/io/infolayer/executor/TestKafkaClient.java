@@ -18,7 +18,7 @@ public class TestKafkaClient {
     
     @Test
     public void testConnectionAndPool() {
-        KafkaClient client = new KafkaClient("teste", "Executors.Sample1");
+        KafkaClient client = new KafkaClient("kafka:9092", "teste", "Executors.Sample1");
         client.listen();
         client.close();
     }

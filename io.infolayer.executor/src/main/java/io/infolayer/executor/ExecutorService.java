@@ -29,15 +29,15 @@ public class ExecutorService implements IPluginExecutorService {
 
 	private static Logger log = LoggerFactory.getLogger(ExecutorService.class);
 
-	//private KafkaClient client; 
+	private KafkaClient client;
 
-	private PluginPoolExecutorService threadPool = null;
+	private PoolExecutorService threadPool = null;
 	private Map<String, PluginPrototype> pluginCache = null;
 	private String workingDirectory;
 
 	public ExecutorService() {
 		this.pluginCache = new ConcurrentHashMap<String, PluginPrototype>();
-		this.threadPool = new PluginPoolExecutorService(10, 100);
+		this.threadPool = new PoolExecutorService(10, 100);
 	}
 
 	public void setWorkingDirectory(String workingDirectory) {
@@ -46,23 +46,18 @@ public class ExecutorService implements IPluginExecutorService {
 	
 	@Activate
 	public void start(BundleContext ctx) throws Exception {
-		log.info("Starting Plugin service");
-
-
-
-		// KafkaClient client = new KafkaClient("xpto", "topic");
-        // client.listen();
-
-		log.info("Started");
+		log.info("Starting Infolayer ExecutorService");
+		client = new KafkaClient("kafka:9029", "xpto", "topic");
+        //client.listen();
 	}
 	
 	@Deactivate
 	public void stop(BundleContext ctx) {
 		
-		// client.close();
+		client.close();
 		this.pluginCache.clear();
 		threadPool.shutdown();
-		log.info("Plugin service stopped.");
+		log.info("Infolayer ExecutorService stopped.");
 	}
 
 	public int getQueueCount() {
@@ -92,10 +87,10 @@ public class ExecutorService implements IPluginExecutorService {
 				throw new PluginException("OutputFlow cannot be null");
 			}
 			
-			PluginPrototype prototype =  this.pluginCache.get(call.toPluginSimpleName());
+			PluginPrototype prototype =  this.pluginCache.get(call.getPluginName());
 			
 			if (prototype == null) {
-				throw new PluginException(MessageFormat.format("Plugin not found: {0}", call.getPluginFqdnName()));
+				throw new PluginException(MessageFormat.format("Plugin not found: {0}", call.getPluginName()));
 			}
 			
 			Map<String, String> env = prototype.cloneEnvironment();
@@ -129,7 +124,7 @@ public class ExecutorService implements IPluginExecutorService {
 				e.printStackTrace();
 			}
 			log.error(MessageFormat.format("Plugin submission exception: Plugin name {0}, params {1}, elapsed {2} ms.", 
-					call.getPluginFqdnName(), 
+					call.getPluginName(), 
 					call.getPluginParams() != null ? call.getPluginParams().size() : -1, 
 					(System.currentTimeMillis() - tStart)));
 			throw new PluginException(e);

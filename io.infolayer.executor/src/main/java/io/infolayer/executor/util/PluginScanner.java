@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import io.infolayer.annotation.Plugin;
 import io.infolayer.exception.MalformedPluginException;
-import io.infolayer.executor.PluginService;
 import io.infolayer.plugin.IRunnablePlugin;
 import io.infolayer.plugin.PluginMetadata;
 import io.infolayer.plugin.PluginPrototype;
@@ -21,7 +20,7 @@ import io.infolayer.utils.PlatformUtils;
 
 public class PluginScanner {
 
-    private static final Logger log = LoggerFactory.getLogger(PluginService.class);
+    private static final Logger log = LoggerFactory.getLogger(PluginScanner.class);
 
     public static List<PluginMetadata> scanXMLPlugins(Bundle bundle, Class<?> classRef) {
 		
@@ -46,7 +45,7 @@ public class PluginScanner {
 
                 try {
                     IPluginParser parser = new PluginXMLFileParser(new File(item), classRef);
-                    if (acceptPlugin(parser)) {
+                    if (acceptPlugin(parser, classRef)) {
                         found.add(parser.getPlugin());
                     }
                     
@@ -88,7 +87,7 @@ public class PluginScanner {
 					if (clazz.isAnnotationPresent(Plugin.class)) {
                         log.debug("Found plugin: {}", className);
                         IPluginParser parser = new PluginAnnotationParser(clazz);
-                        if (acceptPlugin(parser)) {
+                        if (acceptPlugin(parser, classRef)) {
                             found.add(parser.getPlugin());
                         }
 					}
@@ -103,7 +102,7 @@ public class PluginScanner {
         return found;
     }
 
-    private static boolean acceptPlugin(IPluginParser parser) {
+    private static boolean acceptPlugin(IPluginParser parser, Class<?> classRef) {
 		try {
 			PluginMetadata plugin = parser.getPlugin();
 
@@ -133,7 +132,7 @@ public class PluginScanner {
 					}
 					
 					//Just create and thorws any exception
-					createRunnablePlugin(prototype);
+					createRunnablePlugin(prototype, classRef);
                     log.info("   Plugin instantiation validation passed.");
                     return true;
 					
@@ -152,9 +151,9 @@ public class PluginScanner {
         return false;
     }
     
-    private static IRunnablePlugin createRunnablePlugin(PluginPrototype prototype) throws Exception {
+    private static IRunnablePlugin createRunnablePlugin(PluginPrototype prototype, Class<?> classRef) throws Exception {
 		
-		IRunnablePlugin runnablePlugin = OsgiUtils.createInstance(IRunnablePlugin.class, this.getClass(), prototype.getPluginClassName());
+		IRunnablePlugin runnablePlugin = OsgiUtils.createInstance(IRunnablePlugin.class, classRef, prototype.getPluginClassName());
 		
 		runnablePlugin.configure(
 				prototype.clonePlugin(), 

@@ -39,7 +39,7 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Bundle-Vendor>infolayer.io</Bundle-Vendor>
                         <Bundle-Version>${project.version}</Bundle-Version>
-                        <Export-Package>!*</Export-Package>
+                        <Export-Package>io.infolayer*</Export-Package>
                         <Import-Package>
 							!sun.security.util,
 							*

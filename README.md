@@ -26,13 +26,19 @@ Infolayer project is an abstraction layer for tools and frameworks responsible f
 - Support for events in E-mail reading.
 - Support for events in GELF (Graylog Extend Log format).
 
+## Setup and quick start
+
+To setup a new environment, visit [Setup](docs/Setup.md).
+
+To quick start on a new environment, visit [Quick start](setup/QuickStart.md).
+
 ## Concept
 
 ### Architecture
 
 ![Architecture diagram](docs/images/arch.png)
 
-### Instance
+### Infolayer Instance
 
 An instance is a group of resources: Service BUS, API Gateway, Repositories, Scheduler, Remote and Executor Services.
 
@@ -40,19 +46,11 @@ An instance is a group of resources: Service BUS, API Gateway, Repositories, Sch
 
 ### Service BUS
 
-Central heart of the system. It is an Apache Kafka deployment.
+It is Apache Kafka.
 
-### The API Gateway Service
+### API Gateway Service
 
 Responsible for Input/Output. Users reach frameworks and repositories thrugh this component. The protocol is HTTPS and the API is Rest format. Check documentation for examples.
-
-### Scheduler
-
-Reads from the service bus scheduled tasks, holds the scheduler trigger and fire. Scheduler has no user interaction and all the configuration is done by the API Gateway Services. You may or may not have an Scheduler in our setup. Stopping the scheduler services simple stop triggering scheduled tasks.
-
-### Remote
-
-Responsible for dealing with distributed configuration and data exchange. Each instance can be connected to a upper instance creating an hierachical management structure. Remote operations are always assincronous.
 
 ### Repositories
 
@@ -64,18 +62,26 @@ Responsible for dealing with distributed configuration and data exchange. Each i
 |Statistics|InfluxDB|Metrics and timeseries tables|
 |Code|Git|Execution code responsible for actions, data ingest and response to events|
 
+### Scheduler
+
+Reads from the service bus scheduled tasks, holds the scheduler trigger and fire. Scheduler has no user interaction and all the configuration is done by the API Gateway Services. You may or may not have an Scheduler in our setup. Stopping the scheduler services simple stop triggering scheduled tasks.
+
+### Remote
+
+Responsible for dealing with distributed configuration and data exchange. Each instance can be connected to a upper instance creating an hierachical management structure. Remote operations are always assincronous.
+
 ### Executor Service
 
 Executor Services are responsible for running code (talk to the supported framework). Code is ```code``` found under a repository (Git for exeample). Each Executor Service is connected to the service bus (Apache Kafka dependant) building executors instances or executors instance groups.
 
 You can have as many as necessary Executors Services and some can be specialized for different tasks. You might need just for Linux/Unix and another for Windows specific tasks. Also, in case your need relies on massive SQL queries (maybe you are monitoring a huge RDBMS site) you should consider deploying a group of Executors for JDBC queries in a load balancing strategy.
 
-## Creating a Execution Unit (a.k.a. Job)
+## Creating a Runbook
 
-An execution unit is defined by:
+A Runbook is a pre-defined and templated code sequence done by plugins.
 
 ```yaml
-name: Name of your execution unit   #<- Required
+name: Name of your Runbook          #<- Required
 enabled: false                      #<- Default is true. Can be ommited
 schedule: 0 */3 * ? * *             #<- Example, defines a recurrent trigger. Can be ommited
 repository: name                    #<- Name of repository to lookup code. If ommited default is used
@@ -96,11 +102,11 @@ do:                                 #<- Required (at least one)
             timeout: 4320000
 ```
 
-### Creating a new Plugin
+## Creating a Plugin
 
 You can create a **new plugin** (annotated java class) or **decorating** (yaml or xml file) for an already existent plugin.
 
-**Annotated java class**
+### Annotated java class
 
 ```java
 import io.infolayer.siteview.annotation.Plugin;
@@ -132,7 +138,7 @@ public class MyFirstPlugin extends AbstractRunnablePlugin {
 }
 ```
 
-Decorating an existant plugin (hiding complexity and making a frendly interface).
+### Decorating an existant plugin (hiding complexity and making a frendly interface)
 
 ```xml
 <?xml version="1.0"?>
@@ -157,7 +163,7 @@ Decorating an existant plugin (hiding complexity and making a frendly interface)
 </plugin>
 ```
 
-Then, plugins can be used.
+Then, plugins can be used on your Runbook.
 
 ```yaml
 name: Calling MyFirstPlugin and a decorated UnixProcessRunnablePlugin 
@@ -170,7 +176,7 @@ do:
 
 ## Code
 
-- Components are pure Java code. Executor Services relies on OSGi (Apache Felix 7.0) for class loading isolation and mudularity.
+- Components are pure Java code. Executor Services relies on OSGi (Apache Felix) for class loading isolation and mudularity.
 
 ## Build
 
@@ -179,46 +185,5 @@ do:
 
 ## Deploy
 
-### Setup Apache Kafka cluster
+To setup a new environment, visit [Setup](docs/Setup.md).
 
-- Deploy on a single machine (development or production) [Recommend steps](https://www.digitalocean.com/community/tutorials/how-to-install-apache-kafka-on-centos-7)
-
-### Deploy the API Gateway
-
-- Setup: Linux (systemv) and Windows (winsw) services. Kubernets is comming...
-
-- Running:
-
-```shell
-java -jar gateway.jar --server.address=kafka.fqdn:5099 --bind=0.0.0.0:8080
-```
-
-### Deploy Scheduler
-
-- Setup: Linux (systemv) and Windows (winsw) services. Kubernets is comming...
-
-- Running:
-
-```shell
-java -jar scheduler.jar --server.address=kafka.fqdn:5099
-```
-
-### Deploy Remote
-
-- Setup: Linux (systemv) and Windows (winsw) services. Kubernets is comming...
-
-- Running:
-
-```shell
-java -jar remote.jar --server.address=kafka.fqdn:5099
-```
-
-### Deploy Executor Services
-
-- Setup: Linux (systemv) and Windows (winsw) services. Kubernets is comming...
-
-- Running:
-
-```shell
-java -jar executor.jar --server.address=kafka.fqdn:5099
-```

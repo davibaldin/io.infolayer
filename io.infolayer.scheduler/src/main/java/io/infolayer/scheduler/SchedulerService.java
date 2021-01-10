@@ -252,7 +252,7 @@ public class SchedulerService implements ISchedulerService {
 			
 			if (SchedulerEntry.TYPE_PLAYBOOK_RUN.equals(job.getType())) {
 				jobDetail = JobBuilder
-						.newJob(PlaybookRunJobAdapter.class)
+						.newJob(RunbookJobAdapter.class)
 						.withIdentity(job.getOid()).build();
 				
 				jobDetail.getJobDataMap().put("instance", job.getInstance());

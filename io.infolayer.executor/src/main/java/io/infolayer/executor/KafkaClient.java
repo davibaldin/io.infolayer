@@ -15,14 +15,16 @@ public class KafkaClient {
     private String topic;
     private KafkaConsumer<String, String> consumer;
     private boolean open;
+    private String server;
 
-    public KafkaClient(String group, String topic) {
+    public KafkaClient(String server, String group, String topic) {
         this.group = group;
         this.topic = topic;
         this.open = false;
+        this.server = server;
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "kafka:9092");
+        props.put("bootstrap.servers", server);
         props.put("group.id", group);
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");

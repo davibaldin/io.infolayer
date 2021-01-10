@@ -22,19 +22,19 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlaybookRunJobAdapter implements Job {
+public class RunbookJobAdapter implements Job {
 	
-	private final Logger log = LoggerFactory.getLogger(PlaybookRunJobAdapter.class);
+	private final Logger log = LoggerFactory.getLogger(RunbookJobAdapter.class);
 	
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		
-		log.debug("PlaybookRunJobAdapter execute()");
+		log.debug("RunbookJobAdapter execute()");
 		
 		String oid = context.getJobDetail().getJobDataMap().get("instance").toString();
 		
 		if (oid == null) {
-			log.error("Playbook oid is null. Execution will return now.");
+			log.error("Runbook oid is null. Execution will return now.");
 			return;
 		}
 		

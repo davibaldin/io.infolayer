@@ -53,9 +53,9 @@
 									<fileset dir="../../io.infolayer.executor/target">
 										<include name="*.jar"/>
 									</fileset>
-									<fileset dir="target/dependency">
+									<!-- <fileset dir="target/dependency">
 										<include name="*.jar"/>
-									</fileset>
+									</fileset> -->
 								</copy>
 								<delete dir="target/dependency" failonerror="false"/>
 								<delete dir="temp" failonerror="false"/>

@@ -14,48 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.infolayer.plugin;
+package io.infolayer.exception;
 
-import java.util.Set;
-import java.util.concurrent.Future;
+public class PluginServiceProviderException extends Exception {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3428316930245515030L;
 
-/**
- * Interface used to execute plugins.
- * @author davi@infolayer.io
- *
- */
-public interface IPluginExecutorService {
-	
-	/**
-	 * Submit for execution.
-	 * @param plugin
-	 * @return 
-	 */
-	public Future<IRunnablePlugin> submit(IRunnablePlugin plugin);
-
-	
-	/**
-	 * Shutdown service. Cancel all running instances.
-	 */
-	public void shutdown();
-	
-	/**
-	 * Return running queue length.
-	 * @return
-	 */
-	public int getRunningCount();
-	
-	/**
-	 * Return a list of running instances id.
-	 * @return
-	 */
-	public Set<String> getRunningInstances();
-	
-	/**
-	 * Cancel a running instance id.
-	 * @param instanceId
-	 * @return 
-	 */
-	public boolean cancel(String instanceId);
+	public PluginServiceProviderException (String e) {
+		super(e);
+	}
 
 }

@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.infolayer.executor;
 
 import java.util.Enumeration;
@@ -18,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import io.infolayer.plugin.IPluginExecutorService;
 import io.infolayer.plugin.IRunnablePlugin;
 
-public class PluginPoolExecutorService implements IPluginExecutorService {
+public class PoolExecutorService implements IPluginExecutorService {
 	
 	public class PoolEntry {
 		private Future<?> future;
@@ -51,12 +67,12 @@ public class PluginPoolExecutorService implements IPluginExecutorService {
 		
 	}
 	
-	private static Logger log = LoggerFactory.getLogger(PluginPoolExecutorService.class);
+	private static Logger log = LoggerFactory.getLogger(PoolExecutorService.class);
 	private final ThreadPoolExecutor execService;
 	private final ConcurrentHashMap<String, PoolEntry> submittedTasks;
 	private boolean first = true;
 	
-	public PluginPoolExecutorService(int corePoolSize, int maxPoolSize) {
+	public PoolExecutorService(int corePoolSize, int maxPoolSize) {
 		submittedTasks = new ConcurrentHashMap<String, PoolEntry>();
 		this.execService = new ThreadPoolExecutor(
 				corePoolSize, 
@@ -108,18 +124,6 @@ public class PluginPoolExecutorService implements IPluginExecutorService {
 		 * 2. Register the task and its due date
 		 */
 		submittedTasks.put(plugin.getInstanceID(), entry);
-		
-//		/*
-//		 * 3. register a Thread watcher 
-//		 */
-//		if (plugin.getTimeout() > 0) {
-//			ThreadExecutorWatcher watcher = new ThreadExecutorWatcher(task, this.timeout, plugin.getInstanceID(), this);
-//			this.execService.submit(watcher);
-//		}
-		
-//		if (log.isDebugEnabled()) {
-//			log.debug("Submitted plugin for execution: " + plugin.toString() + ", task is: " + task.toString() + ", timeout (ms) = " + this.timeout);
-//		}
 		
 		return task;
 	}
